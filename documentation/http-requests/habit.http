@@ -1,0 +1,14 @@
+### Post habit-hello-world to create first habit
+POST http://localhost:9000/api/habit/create
+Content-Type: application/json
+
+{
+    "name": "habit-hellow-world",
+    "description": "My very first habit"
+}
+
+### Get habit-1 habit
+GET http://localhost:9000/api/habit?name=habit-hellow-world
+
+
+
