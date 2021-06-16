@@ -1,15 +1,25 @@
 package com.demo.habit.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
-@NoArgsConstructor
+@Entity
 @AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "habit")
 public class Habit {
 
+    @Id
+    @NonNull
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
 
 }
