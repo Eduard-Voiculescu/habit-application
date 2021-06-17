@@ -3,12 +3,12 @@ POST http://localhost:9000/api/habit/create
 Content-Type: application/json
 
 {
-    "name": "habit-hellow-world",
+    "name": "habit-hello-world",
     "description": "My very first habit"
 }
 
-### Get habit-1 habit
-GET http://localhost:9000/api/habit?name=habit-hellow-world
+### Get all habits
+GET http://localhost:9000/api/habit
 
 
 
