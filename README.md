@@ -7,3 +7,6 @@ Here is a [link](https://habit-application.atlassian.net/secure/RapidBoard.jspa?
 
 Draw.io [link](https://drive.google.com/file/d/1uyTQS47xVZjhGB_ibXta-u8SgBBcUy8w/view?usp=sharing) for the schema of the application.
 This is a bird's eye view of what is to be done. Nothing concrete for the moment.
+
+To start Postgres docker container: <br />
+```docker run -d -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres```
