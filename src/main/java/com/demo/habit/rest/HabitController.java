@@ -33,7 +33,7 @@ public class HabitController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateHabit(Habit habit) {
+    public ResponseEntity<String> updateHabit(@RequestBody Habit habit) {
         return habitService.updateHabit(habit);
     }
 
