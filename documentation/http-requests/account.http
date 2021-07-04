@@ -1,0 +1,11 @@
+### Create account
+POST http://localhost:9000/api/account/create
+Content-Type: application/json
+
+{
+  "userName": "userName",
+  "firstName": "firstName",
+  "lastName": "lastName",
+  "email": "email",
+  "password": "password"
+}
