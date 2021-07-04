@@ -15,6 +15,9 @@ import javax.persistence.Table;
 public class Habit {
 
     @Id
+    @Column(name = "id")
+    private String id;
+
     @NonNull
     @Column(name = "name")
     private String name;
