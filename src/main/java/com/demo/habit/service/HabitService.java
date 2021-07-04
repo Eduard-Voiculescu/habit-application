@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -20,16 +21,27 @@ public class HabitService {
     }
 
     public ResponseEntity<String> createHabit(Habit habit) {
-        if (habitRepository.existsById(habit.getName())) {
-            log.debug("Cannot create habit {} as it already exist.", habit.getName());
-            return ResponseEntity.badRequest().body(
-                    String.format("Habit %s already exists.", habit.getName())
-            );
-        } else {
-            log.debug("Habit {} created successfully", habit.getName());
-            habitRepository.save(habit);
-            return ResponseEntity.ok("Habit created successfully");
-        }
+        String habitId = UUID.randomUUID().toString();
+
+        Optional<Habit> habitOptional = habitRepository.findById(habitId);
+
+        return habitOptional.map(
+                hab -> {
+                    log.debug("Cannot create habit {} as it already exist.", habit.getName());
+
+                    return ResponseEntity.badRequest().body(
+                            String.format("Habit %s already exists.", habit.getName())
+                    );
+                }
+            ).orElseGet(
+                () -> {
+                    habit.setId(habitId);
+                    log.debug("Habit {} created successfully", habit.getName());
+                    habitRepository.save(habit);
+
+                    return ResponseEntity.ok("Habit created successfully");
+            }
+        );
     }
 
     public List<Habit> getAllHabits() {
@@ -49,17 +61,20 @@ public class HabitService {
     public ResponseEntity<String> updateHabit(Habit habit) {
         Optional<Habit> habitOptional = habitRepository.findHabitByName(habit.getName());
 
-        if (habitOptional.isPresent()){
-            log.debug("Habit {} updated successfully", habit.getName());
-            habitRepository.save(habit);
+        return habitOptional.map(
+                hab -> {
+                    log.debug("Habit {} updated successfully", hab.getName());
+                    habitRepository.save(hab);
 
-            return ResponseEntity.ok("Habit updated successfully");
-        } else {
-            log.debug("Cannot fetch habit {} as it does not exist.", habit.getName());
-            return ResponseEntity.badRequest().body(
-                    String.format("Habit %s does not exist", habit.getName())
-            );
-        }
+                    return ResponseEntity.ok("Habit updated successfully");
+                }
+            ).orElseGet(
+                () -> {
+                    log.debug("Cannot update habit {} as it does not exist.", habit.getName());
+
+                    return ResponseEntity.badRequest().body(String.format("Habit %s does not exist", habit.getName()));
+            }
+        );
     }
 
     public ResponseEntity<String> deleteHabit(Habit habit) {
@@ -69,9 +84,9 @@ public class HabitService {
             log.debug("Habit {} deleted successfully", habit.getName());
             habitRepository.delete(habit);
 
-            return ResponseEntity.ok("Habit updated successfully");
+            return ResponseEntity.ok("Habit deleted successfully");
         } else {
-            log.debug("Cannot fetch habit {} as it does not exist.", habit.getName());
+            log.debug("Cannot delete habit {} as it does not exist.", habit.getName());
             return ResponseEntity.badRequest().body(
                     String.format("Habit %s does not exist.", habit.getName())
             );
