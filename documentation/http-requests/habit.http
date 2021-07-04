@@ -1,14 +1,23 @@
-### Post habit-hello-world to create first habit
+### create habit
 POST http://localhost:9000/api/habit/create
 Content-Type: application/json
 
 {
-    "name": "habit-hello-world",
+    "name": "hello-world",
     "description": "My very first habit"
 }
 
-### Get all habits
+### get all habits
 GET http://localhost:9000/api/habit
 
+### get habit
+GET http://localhost:9000/api/habit/hello-world
 
+### update habit
+POST http://localhost:9000/api/habit/update
+Content-Type: application/json
 
+{
+    "name": "hello-world",
+    "description": "My very first habit has been updated"
+}
