@@ -4,13 +4,12 @@ databaseChangeLog:
       author: eduard.voiculescu
       changes:
         - createTable:
-            tableName: profile
+            tableName: account
             columns:
               - column:
-                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: profile_pkey
+                    primaryKeyName: account_pkey
                   name: id
                   type: bigint
               - column:
@@ -19,3 +18,16 @@ databaseChangeLog:
               - column:
                   name: password
                   type: VARCHAR(255)
+              - column:
+                  name: firstname
+                  type: VARCHAR(255)
+              - column:
+                  name: lastname
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+

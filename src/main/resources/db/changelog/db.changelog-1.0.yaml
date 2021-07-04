@@ -10,10 +10,10 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: habit_pkey
-                  name: name
+                  name: id
                   type: VARCHAR(255)
               - column:
-                  name: notes
+                  name: name
                   type: VARCHAR(255)
               - column:
                   name: description
