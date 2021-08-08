@@ -9,6 +9,7 @@ Content-Type: application/json
 
 ### get all habits
 GET http://localhost:9000/api/habit
+Content-Type: application/json
 
 ### get habit
 GET http://localhost:9000/api/habit/hello-world
