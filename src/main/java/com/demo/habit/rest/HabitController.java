@@ -2,7 +2,6 @@ package com.demo.habit.rest;
 
 import com.demo.habit.model.Habit;
 import com.demo.habit.service.HabitService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +39,7 @@ public class HabitController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteHabit(@Param(value = "habitId") String habitId) {
+    public ResponseEntity<String> deleteHabit(@RequestParam(value = "habitId") String habitId) {
         return habitService.deleteHabit(habitId);
     }
 
