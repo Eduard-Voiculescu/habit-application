@@ -2,11 +2,13 @@ package com.demo.habit.rest;
 
 import com.demo.habit.model.Habit;
 import com.demo.habit.service.HabitService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8080/")
 @RestController
 @RequestMapping("/api/habit")
 public class HabitController {
@@ -38,8 +40,8 @@ public class HabitController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteHabit(@RequestBody Habit habit) {
-        return habitService.deleteHabit(habit);
+    public ResponseEntity<String> deleteHabit(@Param(value = "habitId") String habitId) {
+        return habitService.deleteHabit(habitId);
     }
 
 }

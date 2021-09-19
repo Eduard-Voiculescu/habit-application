@@ -77,18 +77,18 @@ public class HabitService {
         );
     }
 
-    public ResponseEntity<String> deleteHabit(Habit habit) {
-        Optional<Habit> habitOptional = habitRepository.findHabitByName(habit.getName());
+    public ResponseEntity<String> deleteHabit(String habitId) {
+        Optional<Habit> habitOptional = habitRepository.findById(habitId);
 
         if (habitOptional.isPresent()){
-            log.debug("Habit {} deleted successfully", habit.getName());
-            habitRepository.delete(habit);
+            log.debug("Habit {} deleted successfully", habitId);
+            habitRepository.delete(habitOptional.get());
 
             return ResponseEntity.ok("Habit deleted successfully");
         } else {
-            log.debug("Cannot delete habit {} as it does not exist.", habit.getName());
+            log.debug("Cannot delete habit {} as it does not exist.", habitId);
             return ResponseEntity.badRequest().body(
-                    String.format("Habit %s does not exist.", habit.getName())
+                    String.format("Habit %s does not exist.", habitId)
             );
         }
     }
