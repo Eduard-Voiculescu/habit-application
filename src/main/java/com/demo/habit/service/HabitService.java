@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +22,10 @@ public class HabitService {
     }
 
     public ResponseEntity<String> createHabit(Habit habit) {
+        if (habit.getName().equals("")) {
+            return ResponseEntity.badRequest().body("Habit name cannot be empty.");
+        }
+
         String habitId = UUID.randomUUID().toString();
 
         Optional<Habit> habitOptional = habitRepository.findById(habitId);
