@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.1
+      author: eduard.voiculescu
+      changes:
+        - createTable:
+            tableName: history
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: history_pkey
+                  name: uuid
+                  type: VARCHAR(255)
+              - column:
+                  name: habitName
+                  type: VARCHAR(255)
+              - column:
+                  name: habitDescription
+                  type: VARCHAR(255)
+              - column:
+                  name: dateCompleted
+                  type: DATE
