@@ -1,0 +1,3 @@
+### get history
+GET http://localhost:9000/api/habit/history/toto
+

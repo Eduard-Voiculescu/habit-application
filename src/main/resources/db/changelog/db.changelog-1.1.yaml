@@ -13,6 +13,9 @@ databaseChangeLog:
                   name: uuid
                   type: VARCHAR(255)
               - column:
+                  name: habitId
+                  type: VARCHAR(255)
+              - column:
                   name: habitName
                   type: VARCHAR(255)
               - column:
