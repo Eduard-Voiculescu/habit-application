@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,8 +48,8 @@ public class HabitService {
         );
     }
 
-    public List<Habit> getAllHabits() {
-        return habitRepository.findAll();
+    public ResponseEntity<List<Habit>> getAllHabits() {
+        return ResponseEntity.ok(habitRepository.findAll());
     }
 
     public ResponseEntity<Habit> getHabit(String name) {

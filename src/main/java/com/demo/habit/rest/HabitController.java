@@ -25,7 +25,7 @@ public class HabitController {
 
     @GetMapping
     public ResponseEntity<List<Habit>> getAllHabits() {
-        return ResponseEntity.ok(habitService.getAllHabits());
+        return habitService.getAllHabits();
     }
 
     @GetMapping("/{name}")
