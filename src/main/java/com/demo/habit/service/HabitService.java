@@ -3,10 +3,12 @@ package com.demo.habit.service;
 import com.demo.habit.model.Habit;
 import com.demo.habit.repository.HabitRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,27 +30,27 @@ public class HabitService {
             return ResponseEntity.badRequest().body("Habit name cannot be empty.");
         }
 
-        String habitId = UUID.randomUUID().toString();
+        String habitId = habit.getId();
+
+        if (Objects.isNull(habit.getId())) {
+            habitId = UUID.randomUUID().toString();
+            habit.setId(habitId);
+        }
 
         Optional<Habit> habitOptional = habitRepository.findById(habitId);
 
-        return habitOptional.map(
-                hab -> {
-                    log.debug("Cannot create habit {} as it already exist.", habit.getName());
+        if (habitOptional.isPresent()) {
+            log.info("Cannot create habit {} as it already exist.", habit.getName());
 
-                    return ResponseEntity.badRequest().body(
-                            String.format("Habit %s already exists.", habit.getName())
-                    );
-                }
-            ).orElseGet(
-                () -> {
-                    habit.setId(habitId);
-                    log.debug("Habit {} created successfully", habit.getName());
-                    habitRepository.save(habit);
+            return ResponseEntity.badRequest().body(
+                    String.format("Habit %s already exists.", habit.getName())
+            );
+        } else {
+            log.info("Habit {} created successfully", habit.getName());
+            habitRepository.save(habit);
 
-                    return ResponseEntity.ok("Habit created successfully");
-            }
-        );
+            return ResponseEntity.ok("Habit created successfully");
+        }
     }
 
     public ResponseEntity<List<Habit>> getAllHabits() {
@@ -60,7 +62,7 @@ public class HabitService {
 
         return habit.map(ResponseEntity::ok).orElseGet(
                 () -> {
-                    log.debug("Cannot fetch habit {} as it does not exist.", name);
+                    log.info("Cannot fetch habit {} as it does not exist.", name);
                     return ResponseEntity.notFound().build();
         });
     }
@@ -70,14 +72,14 @@ public class HabitService {
 
         return habitOptional.map(
                 hab -> {
-                    log.debug("Habit {} updated successfully", hab.getName());
+                    log.info("Habit {} updated successfully", hab.getName());
                     habitRepository.save(hab);
 
                     return ResponseEntity.ok("Habit updated successfully");
                 }
             ).orElseGet(
                 () -> {
-                    log.debug("Cannot update habit {} as it does not exist.", habit.getName());
+                    log.info("Cannot update habit {} as it does not exist.", habit.getName());
 
                     return ResponseEntity.badRequest().body(String.format("Habit %s does not exist", habit.getName()));
             }
@@ -88,12 +90,12 @@ public class HabitService {
         Optional<Habit> habitOptional = habitRepository.findById(habitId);
 
         if (habitOptional.isPresent()){
-            log.debug("Habit {} deleted successfully", habitId);
+            log.info("Habit {} deleted successfully", habitId);
             habitRepository.delete(habitOptional.get());
 
             return ResponseEntity.ok("Habit deleted successfully");
         } else {
-            log.debug("Cannot delete habit {} as it does not exist.", habitId);
+            log.info("Cannot delete habit {} as it does not exist.", habitId);
             return ResponseEntity.badRequest().body(String.format("Habit %s does not exist.", habitId));
         }
     }
@@ -104,15 +106,20 @@ public class HabitService {
         if (habitOptional.isPresent()) {
             Habit habit = habitOptional.get();
 
-            habitRepository.delete(habit);
-            log.debug("Habit {} completed successfully", habitId);
+            HttpStatus historyHttpStatus = historyService.createHistoryHabitEntry(habit).getStatusCode();
+            log.info("Habit {} history entry successfully created", habitId);
 
-            historyService.createHistoryHabitEntry(habit);
-            log.debug("Habit {} history entry successfully created", habitId);
+            if (historyHttpStatus.is2xxSuccessful()) {
+                habitRepository.delete(habit);
+                log.info("Habit {} completed successfully", habitId);
 
-            return ResponseEntity.ok("Habit completed successfully.");
+                return ResponseEntity.ok("Habit completed successfully.");
+            } else {
+                log.info("Cannot complete habit {}. Issue with history database table.", habitId);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("InternalServerError");
+            }
         } else {
-            log.debug("Cannot complete habit {} as it does not exist.", habitId);
+            log.info("Cannot complete habit {} as it does not exist.", habitId);
             return ResponseEntity.badRequest().body(String.format("Habit %s does not exist.", habitId));
         }
     }
