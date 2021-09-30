@@ -43,4 +43,9 @@ public class HabitController {
         return habitService.deleteHabit(habitId);
     }
 
+    @PostMapping("/complete")
+    public ResponseEntity<String> completeHabit(@RequestParam(value = "habitId") String habitId) {
+        return habitService.completeHabit(habitId);
+    }
+
 }

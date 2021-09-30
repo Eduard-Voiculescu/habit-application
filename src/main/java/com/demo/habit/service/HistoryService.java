@@ -33,29 +33,28 @@ public class HistoryService {
 
         Optional<History> historyOptional = historyRepository.findHistoryByHabitId(habit.getId());
 
+        return historyOptional.map(
+                history -> {
 
-            return historyOptional.map(
-                    history -> {
+                    log.debug("Habit {} already has a history entry.", history.getHabitId());
+                    return ResponseEntity.badRequest().body(String.format("Habit %s already has a history entry.", history.getHabitId()));
+                }
+        ).orElseGet(
+                () -> {
+                    History history = new History(
+                            UUID.randomUUID().toString(),
+                            habit.getId(),
+                            habit.getName(),
+                            habit.getDescription(),
+                            new Date(System.currentTimeMillis())
+                    );
 
-                        log.debug("Habit {} already has a history entry.", history.getHabitId());
-                        return ResponseEntity.badRequest().body(String.format("Habit %s already has a history entry.", history.getHabitId()));
-                    }
-            ).orElseGet(
-                    () -> {
-                        History history = new History(
-                                UUID.randomUUID().toString(),
-                                habit.getId(),
-                                habit.getName(),
-                                habit.getDescription(),
-                                new Date(System.currentTimeMillis())
-                        );
+                    log.debug("History entry {} created successfully", history.getUuid());
+                    historyRepository.save(history);
 
-                        log.debug("History entry {} created successfully", history.getUuid());
-                        historyRepository.save(history);
-
-                        return ResponseEntity.ok(String.format("History uuid: %s, habitId: %s", history.getUuid(), habit.getId()));
-                    }
-            );
+                    return ResponseEntity.ok(String.format("History uuid: %s, habitId: %s", history.getUuid(), habit.getId()));
+                }
+        );
     }
 
     public ResponseEntity<List<History>> getHistoryEntries() {
