@@ -36,7 +36,7 @@ public class HistoryService {
         return historyOptional.map(
                 history -> {
 
-                    log.debug("Habit {} already has a history entry.", history.getHabitId());
+                    log.info("Habit {} already has a history entry.", history.getHabitId());
                     return ResponseEntity.badRequest().body(String.format("Habit %s already has a history entry.", history.getHabitId()));
                 }
         ).orElseGet(
@@ -49,7 +49,7 @@ public class HistoryService {
                             new Date(System.currentTimeMillis())
                     );
 
-                    log.debug("History entry {} created successfully", history.getUuid());
+                    log.info("History entry {} created successfully", history.getUuid());
                     historyRepository.save(history);
 
                     return ResponseEntity.ok(String.format("History uuid: %s, habitId: %s", history.getUuid(), habit.getId()));
@@ -66,13 +66,13 @@ public class HistoryService {
 
         return historyOptional.map(
                 history -> {
-                    log.debug("Found history entry for habit");
+                    log.info("Found history entry for habit");
 
                     return ResponseEntity.ok(history);
                 }
         ).orElseGet(
                 () -> {
-                    log.debug("Habit {} does not exist.", habitId);
+                    log.info("Habit {} does not exist.", habitId);
 
                     return ResponseEntity.notFound().build();
                 }
@@ -84,14 +84,14 @@ public class HistoryService {
 
         return historyOptional.map(
                 history -> {
-                    log.debug("Deleting history entry {}", uuid);
+                    log.info("Deleting history entry {}", uuid);
                     historyRepository.delete(history);
 
                     return ResponseEntity.ok("");
                 }
         ).orElseGet(
                 () -> {
-                    log.debug("History entry {} does not exist.", uuid);
+                    log.info("History entry {} does not exist.", uuid);
 
                     return ResponseEntity.badRequest().body(String.format("History entry %s does not exist", uuid));
                 }
