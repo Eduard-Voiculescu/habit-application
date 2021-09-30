@@ -19,18 +19,18 @@ public class History {
 
     @Id
     @Column(name = "uuid")
-    String uuid;
+    private String uuid;
 
-    @Column(name = "habitId")
-    String habitId;
+    @Column(name = "habit_id")
+    private String habitId;
 
-    @Column(name = "habitName")
-    String habitName;
+    @Column(name = "habit_name")
+    private String habitName;
 
-    @Column(name = "habitDescription")
-    String habitDescription;
+    @Column(name = "habit_description")
+    private String habitDescription;
 
-    @Column(name = "dateCompleted")
-    Date dateCompleted;
+    @Column(name = "date_completed")
+    private Date dateCompleted;
 
 }

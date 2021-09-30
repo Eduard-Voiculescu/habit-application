@@ -13,14 +13,14 @@ databaseChangeLog:
                   name: uuid
                   type: VARCHAR(255)
               - column:
-                  name: habitId
+                  name: habit_id
                   type: VARCHAR(255)
               - column:
-                  name: habitName
+                  name: habit_name
                   type: VARCHAR(255)
               - column:
-                  name: habitDescription
+                  name: habit_description
                   type: VARCHAR(255)
               - column:
-                  name: dateCompleted
+                  name: date_completed
                   type: DATE
